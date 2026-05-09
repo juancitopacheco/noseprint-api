@@ -165,33 +165,11 @@ def listar_perros():
 
 @app.post("/identificar")
 async def identificar(foto: UploadFile = File(...)):
-    
-    import time
-
-    t0 = time.time()
-    bytes_imagen = await foto.read()
-    print(f"  Lectura imagen : {time.time()-t0:.2f}s")
-
-    t1 = time.time()
-    embedding = imagen_a_embedding(bytes_imagen)
-    print(f"  Embedding      : {time.time()-t1:.2f}s")
-
-    t2 = time.time()
-    ganador_id, confianza, scores = buscar_en_indice(embedding, k=5)
-    print(f"  Búsqueda FAISS : {time.time()-t2:.2f}s")
-
-    print(f"  TOTAL          : {time.time()-t0:.2f}s")
-    # ... resto del código igual
-    
     """
     Recibe una foto de nariz de perro e identifica al perro.
-
-    Retorna:
-    - encontrado     : si se identificó al perro
-    - perro          : datos del perro identificado
-    - confianza      : score de similitud del ganador (0-1)
-    - scores         : score de cada perro candidato
     """
+    import time
+
     # Validar que es una imagen
     if not foto.content_type.startswith("image/"):
         raise HTTPException(
@@ -199,12 +177,16 @@ async def identificar(foto: UploadFile = File(...)):
             detail="El archivo debe ser una imagen (jpg, png, etc.)"
         )
 
-    # Leer los bytes de la imagen
+    # Leer los bytes UNA sola vez
+    t0 = time.time()
     bytes_imagen = await foto.read()
+    print(f"  Lectura imagen : {time.time()-t0:.2f}s")
 
     # Extraer embedding
     try:
+        t1 = time.time()
         embedding = imagen_a_embedding(bytes_imagen)
+        print(f"  Embedding      : {time.time()-t1:.2f}s")
     except Exception as e:
         raise HTTPException(
             status_code=400,
@@ -212,18 +194,16 @@ async def identificar(foto: UploadFile = File(...)):
         )
 
     # Buscar en el índice
+    t2 = time.time()
     ganador_id, confianza, scores = buscar_en_indice(embedding, k=5)
+    print(f"  Búsqueda FAISS : {time.time()-t2:.2f}s")
+    print(f"  TOTAL          : {time.time()-t0:.2f}s")
 
     if ganador_id is None:
         return {"encontrado": False, "mensaje": "Base de datos vacía"}
 
-    # Umbral mínimo de confianza
-    # Si el score es muy bajo, probablemente el perro no está registrado
     UMBRAL = 0.85
     encontrado = confianza >= UMBRAL
-
-    # Agrega esto justo antes de "respuesta = {"
-    #print(f"DEBUG — ganador: {ganador_id}, confianza: {confianza}, scores: {scores}")
 
     respuesta = {
         "encontrado" : encontrado,
@@ -247,7 +227,6 @@ async def identificar(foto: UploadFile = File(...)):
         )
 
     return respuesta
-
 
 @app.post("/registrar")
 async def registrar(
