@@ -1,0 +1,38 @@
+{
+  "perro_001": {
+    "nombre": "Max",
+    "raza": "Golden Retriever",
+    "dueno": "Carlos García",
+    "edad": 3
+  },
+  "perro_002": {
+    "nombre": "Luna",
+    "raza": "Border Collie",
+    "dueno": "Ana Martínez",
+    "edad": 2
+  },
+  "perro_003": {
+    "nombre": "Rocky",
+    "raza": "Bulldog Francés",
+    "dueno": "Pedro Ramírez",
+    "edad": 5
+  },
+  "perro_004": {
+    "nombre": "Coco",
+    "raza": "Labrador",
+    "dueno": "María López",
+    "edad": 4
+  },
+  "perro_005": {
+    "nombre": "Bella",
+    "raza": "Husky Siberiano",
+    "dueno": "Luis Torres",
+    "edad": 1
+  },
+  "perro_006": {
+    "nombre": "caligula",
+    "raza": "Yorkitoy",
+    "dueno": "jc",
+    "edad": 5
+  }
+}
