@@ -28,7 +28,11 @@ app = FastAPI(
 # Sin esto el navegador bloquearía las peticiones
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # en producción especificarías el dominio exacto
+    allow_origins=[
+        "http://localhost:5173",                        # desarrollo local
+        "https://noseprint-frontend.vercel.app",        # producción Vercel
+    ],   # en producción especificarías el dominio exacto
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
