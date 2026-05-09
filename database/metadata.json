@@ -123,10 +123,5 @@
     "perro_id": "perro_005",
     "foto": "foto_05.jpg",
     "ruta": "data/train\\perro_005\\foto_05.npy"
-  },
-  {
-    "perro_id": "perro_006",
-    "foto": "foto_01.jpg",
-    "ruta": "data/train/perro_006/foto_01.npy"
   }
 ]

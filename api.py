@@ -43,9 +43,15 @@ app.add_middleware(
 # Si lo hiciéramos en cada petición, cada identificación tardaría ~3 segundos
 # solo en cargar el modelo.
 
-print("Cargando modelo ResNet-50...")
-modelo = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
-modelo.fc = torch.nn.Identity()
+#print("Cargando modelo ResNet-50...")
+# ANTES Cambiando ResNet-50 por MobileNetV3
+#modelo = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
+#modelo.fc = torch.nn.Identity()
+#modelo.eval()
+# DESPUÉS
+print("Cargando modelo MobileNetV3...")
+modelo = models.mobilenet_v3_small(weights=models.MobileNet_V3_Small_Weights.DEFAULT)
+modelo.classifier = torch.nn.Identity()
 modelo.eval()
 print("✓ Modelo listo")
 
@@ -108,7 +114,7 @@ def buscar_en_indice(embedding: np.ndarray, k: int = 5):
             votos[perro_id] = []
         votos[perro_id].append(float(score))
 
-    #print(f"  Votos agrupados:")
+    #print(f"  Votos agrupados:") PARA DEBUGEAR
     #for pid, ss in votos.items():
     #    print(f"    {pid}: votos={len(ss)} max={max(ss):.4f} mean={np.mean(ss):.4f}")
 
