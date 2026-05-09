@@ -165,6 +165,24 @@ def listar_perros():
 
 @app.post("/identificar")
 async def identificar(foto: UploadFile = File(...)):
+    
+    import time
+
+    t0 = time.time()
+    bytes_imagen = await foto.read()
+    print(f"  Lectura imagen : {time.time()-t0:.2f}s")
+
+    t1 = time.time()
+    embedding = imagen_a_embedding(bytes_imagen)
+    print(f"  Embedding      : {time.time()-t1:.2f}s")
+
+    t2 = time.time()
+    ganador_id, confianza, scores = buscar_en_indice(embedding, k=5)
+    print(f"  Búsqueda FAISS : {time.time()-t2:.2f}s")
+
+    print(f"  TOTAL          : {time.time()-t0:.2f}s")
+    # ... resto del código igual
+    
     """
     Recibe una foto de nariz de perro e identifica al perro.
 
